@@ -51,10 +51,10 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
       <div className="p-6 border-b border-slate-200 flex items-center justify-between">
         <h3 className="text-sm font-bold flex items-center gap-2 text-slate-900">
           <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
-          Validation Alerts
+          驗證提示
         </h3>
         <span className="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">
-          {alerts.length} Active
+          {alerts.length} 項待處理
         </span>
       </div>
 
@@ -65,7 +65,7 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
           {alerts.length === 0 ? (
             <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-center">
               <CheckCircle2 className="w-4 h-4 text-green-600 mx-auto mb-1" />
-              <p className="text-xs text-green-800 font-medium">All operational validation checks passed!</p>
+              <p className="text-xs text-green-800 font-medium">所有事工驗證檢查均已通過！</p>
             </div>
           ) : (
             alerts.map((alert) => {
@@ -94,7 +94,7 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
                         onClick={onShuffleRoster}
                         className="text-[10px] text-yellow-900 font-bold mt-2 underline hover:text-amber-900 flex items-center gap-1"
                       >
-                        <RefreshCw className="w-3 h-3 text-amber-700 inline" /> {alert.actionText || 'Shuffle Roster'}
+                        <RefreshCw className="w-3 h-3 text-amber-700 inline" /> {alert.actionText || '調配事奉表'}
                       </button>
                     )}
                   </div>
@@ -123,7 +123,7 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
                       onClick={onUpdateHymnLogic}
                       className="text-[10px] text-blue-900 font-bold mt-2 underline hover:text-blue-950 block"
                     >
-                      {alert.actionText || 'Apply Recommendation'}
+                      {alert.actionText || '套用建議'}
                     </button>
                   )}
                 </div>
@@ -136,13 +136,13 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
         <div className="mt-6 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between mb-3">
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-              Volunteer Roster
+              事奉人員名冊
             </label>
             <button
               onClick={() => setShowAddModal(true)}
               className="text-[10px] text-blue-600 hover:text-blue-800 font-bold flex items-center gap-0.5"
             >
-              <UserPlus className="w-3 h-3" /> Add
+              <UserPlus className="w-3 h-3" /> 新增
             </button>
           </div>
 
@@ -156,7 +156,7 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
               >
                 <div
                   onClick={() => onToggleVolunteerAvailability(vol.id)}
-                  title="Click to toggle availability"
+                  title="點擊以切換可事奉狀態"
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold cursor-pointer select-none transition-colors ${
                     vol.consecutiveWeeks >= 3
                       ? 'bg-amber-100 text-amber-800 border border-amber-300'
@@ -170,7 +170,7 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
                     <p className="text-xs font-bold text-slate-900 truncate">{vol.name}</p>
                     {vol.consecutiveWeeks >= 3 && (
                       <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-1 rounded border border-amber-200">
-                        {vol.consecutiveWeeks}wks
+                        連續{vol.consecutiveWeeks}週
                       </span>
                     )}
                   </div>
@@ -186,13 +186,13 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-xs w-full p-5 shadow-xl border border-slate-200 space-y-3">
-            <h4 className="text-sm font-bold text-slate-900">Add Staff / Volunteer</h4>
+            <h4 className="text-sm font-bold text-slate-900">新增同工／事奉人員</h4>
             <form onSubmit={handleCreateVolunteer} className="space-y-3 text-xs">
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">Full Name</label>
+                <label className="block text-slate-600 font-semibold mb-1">全名</label>
                 <input
                   type="text"
-                  placeholder="e.g. Clara Lewis"
+                  placeholder="例：陳大文"
                   value={volName}
                   onChange={(e) => setVolName(e.target.value)}
                   className="w-full border border-slate-300 rounded px-2.5 py-1.5 text-slate-900"
@@ -200,10 +200,10 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">Role / Assignment</label>
+                <label className="block text-slate-600 font-semibold mb-1">角色／事奉崗位</label>
                 <input
                   type="text"
-                  placeholder="e.g. Organist / Accompanist"
+                  placeholder="例：司琴／伴奏"
                   value={volRole}
                   onChange={(e) => setVolRole(e.target.value)}
                   className="w-full border border-slate-300 rounded px-2.5 py-1.5 text-slate-900"
@@ -216,13 +216,13 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
                   onClick={() => setShowAddModal(false)}
                   className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 font-semibold"
                 >
-                  Cancel
+                  取消
                 </button>
                 <button
                   type="submit"
                   className="px-3 py-1.5 bg-slate-900 text-white rounded font-semibold hover:bg-slate-800"
                 >
-                  Add Volunteer
+                  新增事奉人員
                 </button>
               </div>
             </form>

@@ -43,7 +43,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
           BulletinPro AI
         </h1>
         <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest font-semibold">
-          Church Operations
+          教會事工管理
         </p>
       </div>
 
@@ -52,11 +52,11 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
         {/* Active Automation Toggles */}
         <section>
           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">
-            Active Automation
+            啟用中的自動化
           </label>
           <div className="space-y-2.5">
             <div className="flex items-center justify-between bg-slate-800 p-3 rounded-lg border border-slate-700/80 hover:border-slate-600 transition-colors">
-              <span className="text-xs font-medium text-slate-200">Hymn Selection</span>
+              <span className="text-xs font-medium text-slate-200">詩歌選配</span>
               <button
                 onClick={() => toggleSwitch('hymnSelection')}
                 type="button"
@@ -73,7 +73,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
             </div>
 
             <div className="flex items-center justify-between bg-slate-800 p-3 rounded-lg border border-slate-700/80 hover:border-slate-600 transition-colors">
-              <span className="text-xs font-medium text-slate-200">Volunteer Rotation</span>
+              <span className="text-xs font-medium text-slate-200">事奉輪替</span>
               <button
                 onClick={() => toggleSwitch('volunteerRotation')}
                 type="button"
@@ -90,7 +90,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
             </div>
 
             <div className="flex items-center justify-between bg-slate-800 p-3 rounded-lg border border-slate-700/80 hover:border-slate-600 transition-colors">
-              <span className="text-xs font-medium text-slate-200">Conflict Checker</span>
+              <span className="text-xs font-medium text-slate-200">衝突檢查</span>
               <button
                 onClick={() => toggleSwitch('conflictCheck')}
                 type="button"
@@ -112,7 +112,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
         <section>
           <div className="flex items-center justify-between mb-3">
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-              Configuration Rules
+              設定規則
             </label>
             <button
               onClick={() => {
@@ -121,24 +121,24 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
               }}
               className="text-[10px] text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1"
             >
-              <Sliders className="w-3 h-3" /> Edit
+              <Sliders className="w-3 h-3" /> 編輯
             </button>
           </div>
 
           <div className="space-y-2">
             <div className="p-3 bg-slate-800/50 rounded border border-slate-700 text-xs text-slate-300 rule-border">
-              <span className="block font-bold text-slate-100 mb-0.5">Sermon Series</span>
+              <span className="block font-bold text-slate-100 mb-0.5">信息系列</span>
               {rules.sermonSeries}
             </div>
 
             <div className="p-3 bg-slate-800/50 rounded border border-slate-700 text-xs text-slate-300 rule-border">
-              <span className="block font-bold text-slate-100 mb-0.5">Hymn Style</span>
+              <span className="block font-bold text-slate-100 mb-0.5">詩歌風格</span>
               {rules.hymnStyle}
             </div>
 
             <div className="p-3 bg-slate-800/50 rounded border border-slate-700 text-xs text-slate-300 rule-border">
-              <span className="block font-bold text-slate-100 mb-0.5">Staff Conflict Check</span>
-              {rules.conflictCheck ? `Enabled (Buffer: ${rules.bufferMinutes}m)` : 'Disabled'}
+              <span className="block font-bold text-slate-100 mb-0.5">事奉衝突檢查</span>
+              {rules.conflictCheck ? `已啟用（緩衝：${rules.bufferMinutes} 分鐘）` : '已停用'}
             </div>
           </div>
         </section>
@@ -153,7 +153,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
             }`}
           />
           <span className="text-[11px] font-medium">
-            {isRefreshing ? 'Recalculating logic...' : 'Rules up to date'}
+            {isRefreshing ? '正在重新計算邏輯...' : '規則已是最新狀態'}
           </span>
         </div>
         <button
@@ -162,7 +162,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
           className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 text-white py-2.5 rounded font-semibold text-sm transition-colors flex items-center justify-center gap-2 shadow-sm active:scale-[0.99]"
         >
           <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-          {isRefreshing ? 'Refreshing...' : 'Refresh Schedule'}
+          {isRefreshing ? '重新整理中...' : '重新整理排程'}
         </button>
       </div>
 
@@ -172,7 +172,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
           <div className="bg-slate-900 border border-slate-700 text-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="text-base font-bold flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-blue-400" /> Configure Operations Rules
+                <Sliders className="w-4 h-4 text-blue-400" /> 設定事工規則
               </h3>
               <button
                 onClick={() => setShowRuleModal(false)}
@@ -185,7 +185,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
             <form onSubmit={handleSaveRules} className="space-y-4 text-xs">
               <div>
                 <label className="block text-slate-400 font-semibold mb-1">
-                  Active Sermon Series Name
+                  當前信息系列名稱
                 </label>
                 <input
                   type="text"
@@ -199,7 +199,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
               </div>
 
               <div>
-                <label className="block text-slate-400 font-semibold mb-1">Hymn Style Preference</label>
+                <label className="block text-slate-400 font-semibold mb-1">詩歌風格偏好</label>
                 <select
                   value={tempRules.hymnStyle}
                   onChange={(e) =>
@@ -207,16 +207,16 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
                   }
                   className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-white focus:outline-none focus:border-blue-500"
                 >
-                  <option value="Liturgical / Traditional">Liturgical / Traditional</option>
-                  <option value="Contemporary Worship">Contemporary Worship</option>
-                  <option value="Blended">Blended Style</option>
+                  <option value="禮儀傳統詩歌">禮儀傳統詩歌</option>
+                  <option value="當代敬拜讚美">當代敬拜讚美</option>
+                  <option value="混合風格">混合風格</option>
                 </select>
               </div>
 
               <div className="flex items-center justify-between pt-1">
                 <div>
-                  <span className="block font-semibold text-slate-200">Staff Conflict Checker</span>
-                  <span className="text-[11px] text-slate-400">Flag consecutive volunteer slots</span>
+                  <span className="block font-semibold text-slate-200">事奉衝突檢查</span>
+                  <span className="text-[11px] text-slate-400">標示連續事奉的排班</span>
                 </div>
                 <input
                   type="checkbox"
@@ -230,7 +230,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
 
               <div>
                 <label className="block text-slate-400 font-semibold mb-1">
-                  Buffer Time Between Roles (minutes)
+                  事奉崗位緩衝時間（分鐘）
                 </label>
                 <input
                   type="number"
@@ -253,13 +253,13 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
                   onClick={() => setShowRuleModal(false)}
                   className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 font-semibold"
                 >
-                  Cancel
+                  取消
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded font-semibold"
                 >
-                  Save Rules
+                  儲存規則
                 </button>
               </div>
             </form>

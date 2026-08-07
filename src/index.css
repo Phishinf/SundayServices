@@ -2,7 +2,7 @@
 
 @layer utilities {
   .bulletin-font {
-    font-family: 'Libre Baskerville', Georgia, serif;
+    font-family: 'Noto Serif TC', Georgia, serif;
   }
 
   .paper-shadow {
@@ -15,7 +15,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Noto Sans TC', sans-serif;
   background-color: #f1f5f9;
   color: #0f172a;
 }

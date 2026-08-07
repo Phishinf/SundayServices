@@ -14,6 +14,12 @@ interface HeaderProps {
   onAutoGenerateAI: () => void;
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  draft: '草稿',
+  scheduled: '已排期',
+  finalized: '已定稿',
+};
+
 export const Header: React.FC<HeaderProps> = ({
   services,
   selectedServiceId,
@@ -31,7 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 z-10 shadow-xs">
       {/* Service Selector */}
       <div className="flex items-center gap-4 text-sm font-medium">
-        <span className="text-slate-400 font-semibold uppercase text-xs tracking-wider">Service:</span>
+        <span className="text-slate-400 font-semibold uppercase text-xs tracking-wider">崇拜場次：</span>
         <div className="flex items-center gap-2">
           <select
             value={selectedServiceId}
@@ -40,14 +46,14 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {services.map((service) => (
               <option key={service.id} value={service.id}>
-                {service.title} ({service.status})
+                {service.title}（{STATUS_LABELS[service.status] || service.status}）
               </option>
             ))}
           </select>
 
           <button
             onClick={onAddNewService}
-            title="Create New Service"
+            title="新增崇拜場次"
             className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4" />
@@ -62,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'bg-amber-100 text-amber-800 border border-amber-200'
             }`}
           >
-            {selectedService.status}
+            {STATUS_LABELS[selectedService.status] || selectedService.status}
           </span>
         )}
       </div>
@@ -74,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({
           className="px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
         >
           <Sparkles className="w-3.5 h-3.5 text-purple-600 animate-pulse" />
-          AI Optimize
+          AI 智能優化
         </button>
 
         <button
@@ -86,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
-          {isEditing ? 'View Bulletin' : 'Edit Order'}
+          {isEditing ? '檢視程序表' : '編輯程序'}
         </button>
 
         <button
@@ -94,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
           className="px-4 py-1.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 transition-colors"
         >
           <Printer className="w-4 h-4 text-slate-500" />
-          Export PDF
+          匯出 PDF
         </button>
 
         <button
@@ -102,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
           className="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 flex items-center gap-1.5 shadow-xs transition-colors"
         >
           <Send className="w-4 h-4" />
-          Finalize & Send
+          定稿並發送
         </button>
       </div>
     </header>

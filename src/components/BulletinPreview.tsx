@@ -103,13 +103,13 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
         <div className="w-[540px] mb-4 bg-blue-900 text-white p-3 rounded-lg shadow-md flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Edit3 className="w-4 h-4 text-blue-300" />
-            <span className="font-semibold">Order of Service Editor Mode</span>
+            <span className="font-semibold">崇拜程序編輯模式</span>
           </div>
           <button
             onClick={onOpenAiAssist}
             className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold flex items-center gap-1 transition-colors"
           >
-            <Sparkles className="w-3 h-3 text-yellow-300" /> AI Hymn Match
+            <Sparkles className="w-3 h-3 text-yellow-300" /> AI 詩歌配對
           </button>
         </div>
       )}
@@ -124,7 +124,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
           {editingHeader ? (
             <div className="p-3 bg-slate-50 border border-slate-300 rounded space-y-2 text-left mb-4 font-sans text-xs">
               <div>
-                <label className="block text-slate-500 font-bold mb-0.5">Church Name</label>
+                <label className="block text-slate-500 font-bold mb-0.5">教會名稱</label>
                 <input
                   type="text"
                   value={churchName}
@@ -133,7 +133,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-slate-500 font-bold mb-0.5">Tagline / Motto</label>
+                <label className="block text-slate-500 font-bold mb-0.5">標語／宗旨</label>
                 <input
                   type="text"
                   value={motto}
@@ -142,7 +142,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-slate-500 font-bold mb-0.5">Service Date</label>
+                <label className="block text-slate-500 font-bold mb-0.5">崇拜日期</label>
                 <input
                   type="text"
                   value={dateStr}
@@ -154,7 +154,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 onClick={handleSaveHeader}
                 className="px-3 py-1 bg-slate-900 text-white font-bold rounded flex items-center gap-1"
               >
-                <Check className="w-3.5 h-3.5" /> Save Header
+                <Check className="w-3.5 h-3.5" /> 儲存標頭
               </button>
             </div>
           ) : (
@@ -172,7 +172,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 <button
                   onClick={() => setEditingHeader(true)}
                   className="absolute -top-2 -right-2 p-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-full text-slate-700 shadow-xs text-xs font-sans"
-                  title="Edit Church Header"
+                  title="編輯教會標頭"
                 >
                   <Edit3 className="w-3 h-3" />
                 </button>
@@ -194,7 +194,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                     {service.sermonTitle}
                   </h3>
                   <p className="text-xs italic text-slate-600 mt-0.5">
-                    Scripture Reading: {service.scripture}
+                    經文：{service.scripture}
                   </p>
                   {item.leader && (
                     <p className="text-[11px] font-sans font-medium text-slate-500 mt-1 uppercase tracking-wider">
@@ -208,7 +208,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                         onClick={() => handleDeleteItem(item.id)}
                         className="text-red-600 hover:text-red-800 text-[10px] underline"
                       >
-                        Remove
+                        移除
                       </button>
                     </div>
                   )}
@@ -227,7 +227,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                   </span>
                   {item.hymnNumber && (
                     <span className="text-[10px] font-sans bg-slate-100 px-1.5 py-0.5 rounded text-slate-600 border border-slate-200 font-semibold">
-                      No. {item.hymnNumber}
+                      編號 {item.hymnNumber}
                     </span>
                   )}
                 </div>
@@ -277,18 +277,18 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
         {/* Add New Service Item Form (in edit mode) */}
         {isEditing && (
           <form onSubmit={handleAddItem} className="mt-4 pt-3 border-t border-dashed border-slate-300 font-sans text-xs space-y-2">
-            <span className="font-bold text-slate-700 block">Add Service Element</span>
+            <span className="font-bold text-slate-700 block">新增程序項目</span>
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Label (e.g. Offertory Hymn)"
+                placeholder="項目名稱（例：奉獻詩歌）"
                 value={newItemLabel}
                 onChange={(e) => setNewItemLabel(e.target.value)}
                 className="w-1/3 border border-slate-300 rounded p-1.5 text-xs"
               />
               <input
                 type="text"
-                placeholder="Details (e.g. Sanctuary Choir)"
+                placeholder="內容／負責（例：詩班）"
                 value={newItemDetail}
                 onChange={(e) => setNewItemDetail(e.target.value)}
                 className="flex-1 border border-slate-300 rounded p-1.5 text-xs"
@@ -297,7 +297,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 type="submit"
                 className="px-3 py-1.5 bg-slate-900 text-white rounded font-bold hover:bg-slate-800 flex items-center gap-1 shrink-0"
               >
-                <Plus className="w-3.5 h-3.5" /> Add
+                <Plus className="w-3.5 h-3.5" /> 新增
               </button>
             </div>
           </form>
@@ -307,7 +307,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
         <div className="mt-8 pt-4 border-t-2 border-slate-100">
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-900 font-sans">
-              Announcements
+              家事分享 ／ 報告事項
             </h4>
           </div>
 
@@ -333,7 +333,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
             <form onSubmit={handleAddAnnouncement} className="mt-3 font-sans text-xs flex gap-2">
               <input
                 type="text"
-                placeholder="New announcement text..."
+                placeholder="新增報告事項內容..."
                 value={newAnnouncement}
                 onChange={(e) => setNewAnnouncement(e.target.value)}
                 className="flex-1 border border-slate-300 rounded p-1 text-xs"
@@ -342,7 +342,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 type="submit"
                 className="px-2.5 py-1 bg-slate-800 text-white rounded font-semibold text-xs"
               >
-                Add
+                新增
               </button>
             </form>
           )}
@@ -350,7 +350,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
 
         {/* Bulletin Footer */}
         <div className="absolute bottom-4 left-0 right-0 text-center text-[9px] text-slate-400 uppercase tracking-widest font-sans">
-          Automated by GraceBulletin AI v2.4
+          由 GraceBulletin AI v2.4 自動生成
         </div>
       </div>
     </div>

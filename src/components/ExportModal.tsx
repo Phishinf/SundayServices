@@ -17,21 +17,21 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, servi
 
   const handleCopyText = () => {
     const text = `
-${service.churchName.toUpperCase()}
-"${service.motto}"
+${service.churchName}
+「${service.motto}」
 ${service.date}
 
-ORDER OF SERVICE:
-${service.items.map((i) => `- ${i.label}: ${i.detail}`).join('\n')}
+崇拜程序：
+${service.items.map((i) => `- ${i.label}：${i.detail}`).join('\n')}
 
-SERMON: ${service.sermonTitle} (${service.scripture})
+信息：${service.sermonTitle}（${service.scripture}）
 
-ANNOUNCEMENTS:
+家事分享／報告事項：
 ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
     `.trim();
 
     navigator.clipboard.writeText(text);
-    alert('Bulletin text copied to clipboard!');
+    alert('程序表文字已複製到剪貼簿！');
   };
 
   return (
@@ -40,7 +40,7 @@ ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
             <Printer className="w-5 h-5 text-slate-700" />
-            Export & Print Bulletin
+            匯出並列印程序表
           </h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-700 font-bold">
             ✕
@@ -49,7 +49,7 @@ ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
 
         <div className="space-y-3 text-xs">
           <p className="text-slate-600">
-            Exporting bulletin for <strong className="text-slate-900">{service.title}</strong>. Choose your target output format:
+            正在匯出 <strong className="text-slate-900">{service.title}</strong> 的程序表，請選擇輸出格式：
           </p>
 
           <div className="grid grid-cols-2 gap-3 pt-1">
@@ -58,8 +58,8 @@ ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
               className="p-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-center space-y-2 transition-colors group"
             >
               <Printer className="w-6 h-6 text-slate-700 mx-auto group-hover:scale-110 transition-transform" />
-              <span className="font-bold text-slate-900 block">Print / PDF</span>
-              <span className="text-[10px] text-slate-500 block">Standard 8.5x11 high-res layout</span>
+              <span className="font-bold text-slate-900 block">列印／PDF</span>
+              <span className="text-[10px] text-slate-500 block">標準 8.5x11 高解析度版面</span>
             </button>
 
             <button
@@ -67,8 +67,8 @@ ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
               className="p-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-center space-y-2 transition-colors group"
             >
               <Copy className="w-6 h-6 text-slate-700 mx-auto group-hover:scale-110 transition-transform" />
-              <span className="font-bold text-slate-900 block">Copy Plain Text</span>
-              <span className="text-[10px] text-slate-500 block">For email newsletters & slides</span>
+              <span className="font-bold text-slate-900 block">複製純文字</span>
+              <span className="text-[10px] text-slate-500 block">用於電郵通訊及投影片</span>
             </button>
           </div>
         </div>
@@ -78,7 +78,7 @@ ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
             onClick={onClose}
             className="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded text-xs"
           >
-            Close
+            關閉
           </button>
         </div>
       </div>

@@ -28,9 +28,9 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
     setGenerating(true);
     setTimeout(() => {
       setAiSuggestions([
-        'Youth Ministry Fall Retreat registration opens this Sunday; early bird rate ends Nov 1st.',
-        'Weekly Prayer Walk meets in the courtyard every Thursday morning at 7:30 AM.',
-        'Deacons Fund Special Offering will be collected next Lord’s Day for local outreach.',
+        '青少年秋季退修會現已開始報名，本主日截止早鳥優惠，歡迎弟兄姊妹踴躍參加。',
+        '每週守望禱告會逢週四早上 7 時半於教會庭園舉行，歡迎弟兄姊妹一同參與。',
+        '執事部特別奉獻將於下主日收集，用作社區外展及關懷事工。',
       ]);
       setGenerating(false);
     }, 600);
@@ -43,7 +43,7 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-600" />
-            AI Bulletin Assistant
+            AI 程序表助理
           </h3>
           <button
             onClick={onClose}
@@ -63,7 +63,7 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            Sermon-Hymn Matcher
+            信息詩歌配對
           </button>
           <button
             onClick={() => {
@@ -76,7 +76,7 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
-            Announcement Helper
+            報告事項助手
           </button>
         </div>
 
@@ -84,13 +84,13 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
         {activeTab === 'hymn' && (
           <div className="space-y-3 text-xs">
             <div className="p-3 bg-purple-50 border border-purple-100 rounded-lg text-purple-900">
-              <span className="font-bold block mb-1">Active Sermon Context:</span>
-              <p className="font-serif italic text-sm">"{service.sermonTitle}"</p>
-              <p className="text-[11px] opacity-80 mt-1">Scripture: {service.scripture}</p>
+              <span className="font-bold block mb-1">當前信息主題：</span>
+              <p className="font-serif italic text-sm">「{service.sermonTitle}」</p>
+              <p className="text-[11px] opacity-80 mt-1">經文：{service.scripture}</p>
             </div>
 
             <label className="font-bold text-slate-700 block">
-              Recommended Hymns based on Theological Theme:
+              根據信息主題推薦的詩歌：
             </label>
 
             <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
@@ -101,7 +101,7 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
                 >
                   <div>
                     <span className="font-bold text-slate-900">
-                      No. {hymn.number} - {hymn.title}
+                      編號 {hymn.number} - {hymn.title}
                     </span>
                     <div className="flex gap-1 mt-1">
                       {hymn.tags.map((t) => (
@@ -121,7 +121,7 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
                     }}
                     className="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded font-bold text-xs flex items-center gap-1 shadow-2xs"
                   >
-                    <Check className="w-3 h-3" /> Insert
+                    <Check className="w-3 h-3" /> 套用
                   </button>
                 </div>
               ))}
@@ -133,20 +133,20 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
         {activeTab === 'announcement' && (
           <div className="space-y-3 text-xs">
             <div className="flex justify-between items-center">
-              <span className="font-bold text-slate-700">Generated Church Bulletins Drafts:</span>
+              <span className="font-bold text-slate-700">AI 生成的報告草稿：</span>
               <button
                 onClick={handleGenerateAnnouncements}
                 disabled={generating}
                 className="text-purple-600 hover:text-purple-800 font-bold flex items-center gap-1 text-[11px]"
               >
-                <RefreshCw className={`w-3 h-3 ${generating ? 'animate-spin' : ''}`} /> Regenerate
+                <RefreshCw className={`w-3 h-3 ${generating ? 'animate-spin' : ''}`} /> 重新生成
               </button>
             </div>
 
             {generating ? (
               <div className="py-8 text-center text-slate-500">
                 <Sparkles className="w-6 h-6 text-purple-500 animate-spin mx-auto mb-2" />
-                Drafting contextual church announcements...
+                正在草擬相關教會報告事項...
               </div>
             ) : (
               <div className="space-y-2">
@@ -163,7 +163,7 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
                       }}
                       className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded font-semibold text-[11px] shrink-0"
                     >
-                      Add
+                      新增
                     </button>
                   </div>
                 ))}
@@ -178,7 +178,7 @@ export const AiOptimizeModal: React.FC<AiOptimizeModalProps> = ({
             onClick={onClose}
             className="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded text-xs"
           >
-            Close
+            關閉
           </button>
         </div>
       </div>
