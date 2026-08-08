@@ -16,6 +16,8 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, servi
   };
 
   const handleCopyText = () => {
+    const section = (title: string, body: string) => (body.trim() ? `\n\n【${title}】\n${body.trim()}` : '');
+
     const text = `
 ${service.churchName}
 「${service.motto}」
@@ -28,6 +30,13 @@ ${service.items.map((i) => `- ${i.label}：${i.detail}`).join('\n')}
 
 家事分享／報告事項：
 ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
+${section('詩歌全詞', service.hymnLyrics.map((h) => `${h.title}\n${h.body}`).join('\n\n'))}
+${section('崇拜資料', service.worshipNotes.map((w) => `${w.title}\n${w.body}`).join('\n\n'))}
+${section('家事分享詳情', service.ministryUpdates.map((m) => `${m.title}\n${m.body}`).join('\n\n'))}
+${section('其他報告', service.otherNotices.map((n) => `${n.title}\n${n.body}`).join('\n\n'))}
+${section('本週代禱', service.weeklyPrayers.map((p) => `${p.title} ${p.body}`).join('\n\n'))}
+${section('事奉芳名表', service.serviceRoster.map((r) => `[${r.section}] ${r.role}：本週 ${r.thisWeek}／下週 ${r.nextWeek}`).join('\n'))}
+${section('上週聚會出席人數表', service.attendance.map((a) => `${a.meeting}：${a.count}`).join('\n') + (service.attendanceNote ? `\n${service.attendanceNote}` : ''))}
     `.trim();
 
     navigator.clipboard.writeText(text);
@@ -59,7 +68,7 @@ ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
             >
               <Printer className="w-6 h-6 text-slate-700 mx-auto group-hover:scale-110 transition-transform" />
               <span className="font-bold text-slate-900 block">列印／PDF</span>
-              <span className="text-[10px] text-slate-500 block">標準 8.5x11 高解析度版面</span>
+              <span className="text-[10px] text-slate-500 block">列印目前顯示的頁面（如需多頁，請逐頁切換列印）</span>
             </button>
 
             <button
@@ -68,7 +77,7 @@ ${service.announcements.map((a) => `• ${a.text}`).join('\n')}
             >
               <Copy className="w-6 h-6 text-slate-700 mx-auto group-hover:scale-110 transition-transform" />
               <span className="font-bold text-slate-900 block">複製純文字</span>
-              <span className="text-[10px] text-slate-500 block">用於電郵通訊及投影片</span>
+              <span className="text-[10px] text-slate-500 block">包含全部頁面內容，適用於電郵通訊及投影片</span>
             </button>
           </div>
         </div>

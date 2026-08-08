@@ -10,9 +10,11 @@ interface VoiceOfficerAssistantProps {
 
 const CATEGORY_LABELS: Record<VoiceClassification['category'], string> = {
   service_item: '程序項目',
-  announcement: '家事分享／報告事項',
+  announcement: '家事分享／報告事項（頁 1）',
   sermon_title: '信息題目',
   sermon_scripture: '信息經文',
+  ministry_update: '家事分享詳情（頁 4）',
+  weekly_prayer: '本週代禱（頁 6）',
 };
 
 export const VoiceOfficerAssistant: React.FC<VoiceOfficerAssistantProps> = ({
@@ -118,6 +120,22 @@ export const VoiceOfficerAssistant: React.FC<VoiceOfficerAssistantProps> = ({
       onUpdateService({ ...service, sermonTitle: editedText.trim() });
     } else if (suggestion.category === 'sermon_scripture') {
       onUpdateService({ ...service, scripture: editedText.trim() });
+    } else if (suggestion.category === 'ministry_update') {
+      onUpdateService({
+        ...service,
+        ministryUpdates: [
+          ...service.ministryUpdates,
+          { id: 'voice-mu-' + Date.now(), title: editedLabel.trim() || '家事分享', body: editedText.trim() },
+        ],
+      });
+    } else if (suggestion.category === 'weekly_prayer') {
+      onUpdateService({
+        ...service,
+        weeklyPrayers: [
+          ...service.weeklyPrayers,
+          { id: 'voice-wp-' + Date.now(), title: editedLabel.trim() || '代禱事項', body: editedText.trim() },
+        ],
+      });
     }
 
     setSuggestion(null);
@@ -213,11 +231,13 @@ export const VoiceOfficerAssistant: React.FC<VoiceOfficerAssistantProps> = ({
             </p>
             <p className="text-[10px] text-purple-600 leading-relaxed">{suggestion.reason}</p>
 
-            {suggestion.category === 'service_item' && (
+            {(suggestion.category === 'service_item' ||
+              suggestion.category === 'ministry_update' ||
+              suggestion.category === 'weekly_prayer') && (
               <input
                 value={editedLabel}
                 onChange={(e) => setEditedLabel(e.target.value)}
-                placeholder="項目名稱"
+                placeholder={suggestion.category === 'service_item' ? '項目名稱' : '標題'}
                 className="w-full border border-purple-200 rounded px-2 py-1 text-xs bg-white focus:outline-none focus:border-purple-500"
               />
             )}

@@ -87,6 +87,13 @@ export default function AdminApp() {
       announcements: [
         { id: 'a1', text: '歡迎新來賓！請於座位上填寫連繫卡，方便教會與您保持聯絡。' },
       ],
+      hymnLyrics: [],
+      worshipNotes: [],
+      ministryUpdates: [],
+      otherNotices: [],
+      weeklyPrayers: [],
+      serviceRoster: [],
+      attendance: [],
     };
 
     setServices((prev) => [...prev, newService]);

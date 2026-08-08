@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChurchService, ServiceItem, Announcement, EditorialRole } from '../types/bulletin';
 import { Plus, Trash2, ArrowUp, ArrowDown, Edit3, Check, Sparkles } from 'lucide-react';
 import { WorkflowStatusBar } from './WorkflowStatusBar';
+import { TextBlockList } from './bulletin-pages/TextBlockList';
+import { RosterTable } from './bulletin-pages/RosterTable';
+import { AttendanceTable } from './bulletin-pages/AttendanceTable';
+import { BULLETIN_PAGES, BulletinPageKey } from '../utils/bulletinPages';
 
 interface BulletinPreviewProps {
   service: ChurchService;
@@ -32,6 +36,12 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
   const [newItemLabel, setNewItemLabel] = useState('');
   const [newItemDetail, setNewItemDetail] = useState('');
   const [newAnnouncement, setNewAnnouncement] = useState('');
+
+  const [activePage, setActivePage] = useState<BulletinPageKey>('order');
+
+  useEffect(() => {
+    setActivePage('order');
+  }, [service.id]);
 
   const handleSaveHeader = () => {
     onUpdateService({
@@ -116,6 +126,24 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
         onReject={onWorkflowReject}
       />
 
+      {/* Bulletin page navigator: mirrors the printed original's sections so
+          digitizing them can happen gradually, page by page */}
+      <div className="w-[540px] mb-4 flex gap-1 overflow-x-auto no-scrollbar">
+        {BULLETIN_PAGES.map((page) => (
+          <button
+            key={page.key}
+            onClick={() => setActivePage(page.key)}
+            className={`px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors shrink-0 ${
+              activePage === page.key
+                ? 'bg-slate-900 text-white'
+                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            {page.label}
+          </button>
+        ))}
+      </div>
+
       {/* Editor toolbar banner when in edit mode */}
       {isEditing && (
         <div className="w-[540px] mb-4 bg-blue-900 text-white p-3 rounded-lg shadow-md flex items-center justify-between text-xs">
@@ -137,6 +165,8 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
         {/* Top Dark Bar Accent */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-slate-900" />
 
+        {activePage === 'order' && (
+        <>
         {/* Church Header */}
         <div className="text-center mb-8 relative group">
           {editingHeader ? (
@@ -365,6 +395,128 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
             </form>
           )}
         </div>
+        </>
+        )}
+
+        {activePage === 'hymns' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              詩歌全詞
+            </h3>
+            <TextBlockList
+              blocks={service.hymnLyrics}
+              isEditing={isEditing}
+              onChange={(hymnLyrics) => onUpdateService({ ...service, hymnLyrics })}
+              emptyHint="本週尚未輸入詩歌歌詞，可切換至「編輯程序」加入。"
+              titlePlaceholder="詩歌名稱"
+              metaPlaceholder="（選填）曲／詞／版權"
+              bodyPlaceholder="歌詞全文..."
+              addButtonLabel="新增詩歌"
+            />
+          </div>
+        )}
+
+        {activePage === 'worship' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              崇拜資料
+            </h3>
+            <TextBlockList
+              blocks={service.worshipNotes}
+              isEditing={isEditing}
+              onChange={(worshipNotes) => onUpdateService({ ...service, worshipNotes })}
+              emptyHint="尚未輸入宣召啟應文、信息經文或金句，可切換至「編輯程序」加入。"
+              titlePlaceholder="標題（例：宣召啟應文／信息經文／本月金句）"
+              metaPlaceholder="（選填）經文出處"
+              bodyPlaceholder="內文..."
+              addButtonLabel="新增崇拜資料"
+            />
+          </div>
+        )}
+
+        {activePage === 'ministry' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              家事分享
+            </h3>
+            <TextBlockList
+              blocks={service.ministryUpdates}
+              isEditing={isEditing}
+              onChange={(ministryUpdates) => onUpdateService({ ...service, ministryUpdates })}
+              emptyHint="本週尚未輸入家事分享項目，可切換至「編輯程序」加入。"
+              titlePlaceholder="項目標題（例：1. 青少年暑期活動）"
+              metaPlaceholder="（選填）備註"
+              bodyPlaceholder="詳情（日期／時間／地點／對象等）..."
+              addButtonLabel="新增家事分享項目"
+            />
+          </div>
+        )}
+
+        {activePage === 'notices' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              其他報告
+            </h3>
+            <TextBlockList
+              blocks={service.otherNotices}
+              isEditing={isEditing}
+              onChange={(otherNotices) => onUpdateService({ ...service, otherNotices })}
+              emptyHint="本週尚未輸入其他報告事項，可切換至「編輯程序」加入。"
+              titlePlaceholder="項目標題（例：1. 維修基金奉獻）"
+              metaPlaceholder="（選填）備註"
+              bodyPlaceholder="詳情..."
+              addButtonLabel="新增其他報告"
+            />
+          </div>
+        )}
+
+        {activePage === 'prayers' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              本週代禱
+            </h3>
+            <TextBlockList
+              blocks={service.weeklyPrayers}
+              isEditing={isEditing}
+              onChange={(weeklyPrayers) => onUpdateService({ ...service, weeklyPrayers })}
+              emptyHint="本週尚未輸入代禱事項，可切換至「編輯程序」加入。"
+              titlePlaceholder="編號（例：1.）"
+              metaPlaceholder="（選填）備註"
+              bodyPlaceholder="代禱內容..."
+              addButtonLabel="新增代禱事項"
+            />
+          </div>
+        )}
+
+        {activePage === 'roster' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              事奉芳名表
+            </h3>
+            <RosterTable
+              rows={service.serviceRoster}
+              isEditing={isEditing}
+              onChange={(serviceRoster) => onUpdateService({ ...service, serviceRoster })}
+              emptyHint="本週尚未輸入事奉芳名表，可切換至「編輯程序」加入。"
+            />
+          </div>
+        )}
+
+        {activePage === 'attendance' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              上週聚會出席人數表
+            </h3>
+            <AttendanceTable
+              rows={service.attendance}
+              note={service.attendanceNote}
+              isEditing={isEditing}
+              onChange={(attendance) => onUpdateService({ ...service, attendance })}
+              onChangeNote={(attendanceNote) => onUpdateService({ ...service, attendanceNote })}
+              emptyHint="本週尚未輸入出席人數，可切換至「編輯程序」加入。"
+            />
+          </div>
+        )}
 
         {/* Bulletin Footer */}
         <div className="absolute bottom-4 left-0 right-0 text-center text-[9px] text-slate-400 uppercase tracking-widest font-sans">

@@ -2,10 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { ChurchService } from '../types/bulletin';
 import { getPublishedServices, subscribeToPublishedServices } from '../utils/publishStore';
 import { Printer } from 'lucide-react';
+import { TextBlockList } from './bulletin-pages/TextBlockList';
+import { RosterTable } from './bulletin-pages/RosterTable';
+import { AttendanceTable } from './bulletin-pages/AttendanceTable';
+import { BULLETIN_PAGES, BulletinPageKey } from '../utils/bulletinPages';
+
+function pageHasContent(key: BulletinPageKey, service: ChurchService): boolean {
+  switch (key) {
+    case 'order':
+      return true;
+    case 'hymns':
+      return service.hymnLyrics.length > 0;
+    case 'worship':
+      return service.worshipNotes.length > 0;
+    case 'ministry':
+      return service.ministryUpdates.length > 0;
+    case 'notices':
+      return service.otherNotices.length > 0;
+    case 'prayers':
+      return service.weeklyPrayers.length > 0;
+    case 'roster':
+      return service.serviceRoster.length > 0;
+    case 'attendance':
+      return service.attendance.length > 0;
+    default:
+      return false;
+  }
+}
 
 export const CongregationView: React.FC = () => {
   const [published, setPublished] = useState<ChurchService[]>(() => getPublishedServices());
   const [selectedId, setSelectedId] = useState<string>(() => getPublishedServices()[0]?.id ?? '');
+  const [activePage, setActivePage] = useState<BulletinPageKey>('order');
 
   useEffect(() => {
     const refresh = () => {
@@ -17,6 +45,10 @@ export const CongregationView: React.FC = () => {
   }, []);
 
   const service = published.find((s) => s.id === selectedId) || published[0];
+
+  useEffect(() => {
+    setActivePage('order');
+  }, [service?.id]);
 
   if (!service) {
     return (
@@ -53,9 +85,32 @@ export const CongregationView: React.FC = () => {
         </div>
       )}
 
+      {(() => {
+        const visiblePages = BULLETIN_PAGES.filter((p) => pageHasContent(p.key, service));
+        return visiblePages.length > 1 ? (
+          <div className="w-[540px] mb-4 flex gap-1 overflow-x-auto no-print">
+            {visiblePages.map((page) => (
+              <button
+                key={page.key}
+                onClick={() => setActivePage(page.key)}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors shrink-0 ${
+                  activePage === page.key
+                    ? 'bg-slate-900 text-white'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                {page.label}
+              </button>
+            ))}
+          </div>
+        ) : null;
+      })()}
+
       <div className="w-[540px] min-h-[640px] bg-white paper-shadow p-12 bulletin-font text-[#2a2a2a] relative overflow-hidden bulletin-paper shrink-0">
         <div className="absolute top-0 left-0 right-0 h-1 bg-slate-900" />
 
+        {activePage === 'order' && (
+        <>
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold uppercase tracking-tight text-slate-900">
             {service.churchName}
@@ -124,6 +179,75 @@ export const CongregationView: React.FC = () => {
             ))}
           </div>
         </div>
+        </>
+        )}
+
+        {activePage === 'hymns' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              詩歌全詞
+            </h3>
+            <TextBlockList blocks={service.hymnLyrics} emptyHint="本週未有詩歌歌詞。" />
+          </div>
+        )}
+
+        {activePage === 'worship' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              崇拜資料
+            </h3>
+            <TextBlockList blocks={service.worshipNotes} emptyHint="本週未有崇拜資料。" />
+          </div>
+        )}
+
+        {activePage === 'ministry' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              家事分享
+            </h3>
+            <TextBlockList blocks={service.ministryUpdates} emptyHint="本週未有家事分享項目。" />
+          </div>
+        )}
+
+        {activePage === 'notices' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              其他報告
+            </h3>
+            <TextBlockList blocks={service.otherNotices} emptyHint="本週未有其他報告。" />
+          </div>
+        )}
+
+        {activePage === 'prayers' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              本週代禱
+            </h3>
+            <TextBlockList blocks={service.weeklyPrayers} emptyHint="本週未有代禱事項。" />
+          </div>
+        )}
+
+        {activePage === 'roster' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              事奉芳名表
+            </h3>
+            <RosterTable rows={service.serviceRoster} emptyHint="本週未有事奉芳名表。" />
+          </div>
+        )}
+
+        {activePage === 'attendance' && (
+          <div>
+            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
+              上週聚會出席人數表
+            </h3>
+            <AttendanceTable
+              rows={service.attendance}
+              note={service.attendanceNote}
+              emptyHint="本週未有出席人數資料。"
+            />
+          </div>
+        )}
 
         <div className="mt-10 text-center text-[9px] text-slate-400 uppercase tracking-widest font-sans">
           由 GraceBulletin AI v2.4 自動生成
