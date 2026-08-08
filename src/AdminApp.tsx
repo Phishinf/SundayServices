@@ -7,6 +7,7 @@ import { AiOptimizeModal } from './components/AiOptimizeModal';
 import { ExportModal } from './components/ExportModal';
 import { FinalizeModal } from './components/FinalizeModal';
 import { WorkflowStatusBar } from './components/WorkflowStatusBar';
+import { VoiceOfficerAssistant } from './components/VoiceOfficerAssistant';
 
 import {
   INITIAL_SERVICES,
@@ -277,7 +278,7 @@ export default function AdminApp() {
       />
 
       {/* Center Main Stage */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
+      <main className="flex-1 flex flex-col h-full overflow-hidden min-w-0 relative">
         <Header
           services={services}
           selectedServiceId={selectedServiceId}
@@ -301,6 +302,13 @@ export default function AdminApp() {
           onWorkflowApprove={handleWorkflowApprove}
           onWorkflowReject={handleWorkflowReject}
         />
+
+        {currentRole === 'officer' && (
+          <VoiceOfficerAssistant
+            service={activeService}
+            onUpdateService={handleUpdateActiveService}
+          />
+        )}
       </main>
 
       {/* Right Validation & Staff Roster Sidebar */}
