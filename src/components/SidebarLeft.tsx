@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ConfigurationRules, AutomationToggles, EditorialRole } from '../types/bulletin';
-import { RefreshCw, CheckCircle2, Sliders, ShieldCheck } from 'lucide-react';
+import { RefreshCw, CheckCircle2, Sliders, ShieldCheck, X } from 'lucide-react';
 import { ROLE_LABELS } from '../utils/workflow';
 
 interface SidebarLeftProps {
@@ -12,6 +12,8 @@ interface SidebarLeftProps {
   isRefreshing: boolean;
   currentRole: EditorialRole;
   onChangeRole: (role: EditorialRole) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const ROLE_OPTIONS: EditorialRole[] = ['officer', 'pastor', 'deacon'];
@@ -25,6 +27,8 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
   isRefreshing,
   currentRole,
   onChangeRole,
+  isOpen,
+  onClose,
 }) => {
   const [showRuleModal, setShowRuleModal] = useState(false);
   const [tempRules, setTempRules] = useState<ConfigurationRules>(rules);
@@ -40,18 +44,39 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
   };
 
   return (
-    <aside className="w-72 bg-slate-900 text-white flex flex-col h-full select-none shrink-0 border-r border-slate-800">
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-slate-950/60 z-40 lg:hidden"
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white flex flex-col h-full select-none shrink-0 border-r border-slate-800 transform transition-transform duration-200 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:static lg:translate-x-0 lg:z-auto`}
+      >
       {/* Brand Header */}
-      <div className="p-6 border-b border-slate-700">
-        <h1 className="text-xl font-bold tracking-tight flex items-center gap-2">
-          <div className="w-6 h-6 bg-blue-500 rounded-md flex items-center justify-center text-xs font-black text-white shadow-sm">
-            B
-          </div>
-          BulletinPro AI
-        </h1>
-        <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest font-semibold">
-          教會事工管理
-        </p>
+      <div className="p-6 border-b border-slate-700 flex items-start justify-between">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight flex items-center gap-2">
+            <div className="w-6 h-6 bg-blue-500 rounded-md flex items-center justify-center text-xs font-black text-white shadow-sm">
+              B
+            </div>
+            BulletinPro AI
+          </h1>
+          <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest font-semibold">
+            教會事工管理
+          </p>
+        </div>
+        <button
+          onClick={onClose}
+          className="lg:hidden p-1 text-slate-400 hover:text-white shrink-0"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Main Content Area */}
@@ -198,7 +223,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
       {/* Configuration Rules Edit Modal */}
       {showRuleModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 text-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-slate-900 border border-slate-700 text-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="text-base font-bold flex items-center gap-2">
                 <Sliders className="w-4 h-4 text-blue-400" /> 設定事工規則
@@ -295,6 +320,7 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
           </div>
         </div>
       )}
-    </aside>
+      </aside>
+    </>
   );
 };

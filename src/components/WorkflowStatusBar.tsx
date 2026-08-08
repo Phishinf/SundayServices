@@ -99,9 +99,9 @@ export const WorkflowStatusBar: React.FC<WorkflowStatusBarProps> = ({
   };
 
   return (
-    <div className="w-[540px] mb-4 bg-white border border-slate-200 rounded-lg shadow-xs px-4 py-3 flex items-center justify-between gap-4 shrink-0">
+    <div className="w-full max-w-[540px] mb-4 bg-white border border-slate-200 rounded-lg shadow-xs px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shrink-0">
       {/* Stepper */}
-      <div className="flex items-center">
+      <div className="flex items-center flex-wrap gap-y-1.5">
         {STATUS_ORDER.map((s, idx) => {
           const isFinalized = service.status === 'finalized';
           const isDone = idx < currentIndex || (isFinalized && idx <= currentIndex);
@@ -138,8 +138,8 @@ export const WorkflowStatusBar: React.FC<WorkflowStatusBarProps> = ({
         })}
       </div>
 
-      <div className="flex items-center gap-3 shrink-0">
-        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+      <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 flex-wrap">
+        <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider whitespace-nowrap">
           目前身份：{ROLE_LABELS[currentRole]}
         </span>
         {renderActions()}

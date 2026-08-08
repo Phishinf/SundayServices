@@ -76,7 +76,7 @@ export const TextBlockList: React.FC<TextBlockListProps> = ({
                 />
                 <button
                   onClick={() => deleteBlock(block.id)}
-                  className="p-1 text-red-600 hover:bg-red-50 rounded shrink-0"
+                  className="p-1.5 text-red-600 hover:bg-red-50 rounded shrink-0"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Volunteer, ValidationAlert } from '../types/bulletin';
-import { AlertTriangle, CheckCircle2, UserPlus, RefreshCw, Info, UserCheck } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, UserPlus, RefreshCw, Info, UserCheck, X } from 'lucide-react';
 
 interface SidebarRightProps {
   alerts: ValidationAlert[];
@@ -10,6 +10,8 @@ interface SidebarRightProps {
   onDismissAlert: (id: string) => void;
   onAddVolunteer: (newVol: Volunteer) => void;
   onToggleVolunteerAvailability: (id: string) => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export const SidebarRight: React.FC<SidebarRightProps> = ({
@@ -20,6 +22,8 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
   onDismissAlert,
   onAddVolunteer,
   onToggleVolunteerAvailability,
+  isOpen,
+  onClose,
 }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [volName, setVolName] = useState('');
@@ -46,16 +50,37 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
   };
 
   return (
-    <aside className="w-64 bg-white border-l border-slate-200 flex flex-col h-full shrink-0 select-none overflow-hidden">
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-slate-950/60 z-40 lg:hidden"
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 right-0 z-50 w-72 sm:w-80 bg-white border-l border-slate-200 flex flex-col h-full shrink-0 select-none overflow-hidden transform transition-transform duration-200 ease-in-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        } lg:static lg:w-64 lg:translate-x-0 lg:z-auto`}
+      >
       {/* Sidebar Header */}
       <div className="p-6 border-b border-slate-200 flex items-center justify-between">
         <h3 className="text-sm font-bold flex items-center gap-2 text-slate-900">
           <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
           驗證提示
         </h3>
-        <span className="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">
-          {alerts.length} 項待處理
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">
+            {alerts.length} 項待處理
+          </span>
+          <button
+            onClick={onClose}
+            className="lg:hidden p-1 text-slate-400 hover:text-slate-700 shrink-0"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Content Container */}
@@ -185,7 +210,7 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
       {/* Add Volunteer Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl max-w-xs w-full p-5 shadow-xl border border-slate-200 space-y-3">
+          <div className="bg-white rounded-xl max-w-xs w-full p-5 shadow-xl border border-slate-200 space-y-3 max-h-[90vh] overflow-y-auto">
             <h4 className="text-sm font-bold text-slate-900">新增同工／事奉人員</h4>
             <form onSubmit={handleCreateVolunteer} className="space-y-3 text-xs">
               <div>
@@ -229,6 +254,7 @@ export const SidebarRight: React.FC<SidebarRightProps> = ({
           </div>
         </div>
       )}
-    </aside>
+      </aside>
+    </>
   );
 };

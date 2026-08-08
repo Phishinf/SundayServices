@@ -67,9 +67,9 @@ export const CongregationView: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-screen bg-slate-200 flex flex-col items-center py-10 px-4">
+    <div className="min-h-screen w-screen bg-slate-200 flex flex-col items-center py-6 px-3 sm:py-10 sm:px-4">
       {published.length > 1 && (
-        <div className="w-[540px] mb-4 flex items-center justify-between text-xs no-print">
+        <div className="w-full max-w-[540px] mb-4 flex items-center justify-between text-xs no-print">
           <label className="text-slate-500 font-semibold">選擇崇拜場次：</label>
           <select
             value={selectedId}
@@ -88,7 +88,7 @@ export const CongregationView: React.FC = () => {
       {(() => {
         const visiblePages = BULLETIN_PAGES.filter((p) => pageHasContent(p.key, service));
         return visiblePages.length > 1 ? (
-          <div className="w-[540px] mb-4 flex flex-wrap gap-1.5 no-print">
+          <div className="w-full max-w-[540px] mb-4 flex flex-wrap gap-1.5 no-print">
             {visiblePages.map((page) => (
               <button
                 key={page.key}
@@ -106,7 +106,7 @@ export const CongregationView: React.FC = () => {
         ) : null;
       })()}
 
-      <div className="w-[540px] min-h-[640px] bg-white paper-shadow p-12 bulletin-font text-[#2a2a2a] relative overflow-hidden bulletin-paper shrink-0">
+      <div className="w-full max-w-[540px] min-h-[640px] bg-white paper-shadow p-6 sm:p-12 bulletin-font text-[#2a2a2a] relative overflow-hidden bulletin-paper shrink-0">
         <div className="absolute top-0 left-0 right-0 h-1 bg-slate-900" />
 
         {activePage === 'order' && (
@@ -254,7 +254,7 @@ export const CongregationView: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-[540px] mt-4 flex items-center justify-between no-print">
+      <div className="w-full max-w-[540px] mt-4 flex items-center justify-between no-print">
         <a href="#/admin" className="text-[11px] text-slate-500 hover:text-slate-700 font-semibold">
           教會同工後台
         </a>

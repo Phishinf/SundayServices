@@ -102,7 +102,7 @@ export const RosterTable: React.FC<RosterTableProps> = ({
                       <td className="py-1 w-6">
                         <button
                           onClick={() => deleteRow(row.id)}
-                          className="p-1 text-red-600 hover:bg-red-50 rounded"
+                          className="p-1.5 text-red-600 hover:bg-red-50 rounded"
                         >
                           <Trash2 className="w-3 h-3" />
                         </button>

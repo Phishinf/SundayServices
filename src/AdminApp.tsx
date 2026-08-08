@@ -40,6 +40,9 @@ export default function AdminApp() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
+  const [leftDrawerOpen, setLeftDrawerOpen] = useState<boolean>(false);
+  const [rightDrawerOpen, setRightDrawerOpen] = useState<boolean>(false);
+
   const [showAiModal, setShowAiModal] = useState<boolean>(false);
   const [showExportModal, setShowExportModal] = useState<boolean>(false);
   const [showFinalizeModal, setShowFinalizeModal] = useState<boolean>(false);
@@ -282,6 +285,8 @@ export default function AdminApp() {
         isRefreshing={isRefreshing}
         currentRole={currentRole}
         onChangeRole={setCurrentRole}
+        isOpen={leftDrawerOpen}
+        onClose={() => setLeftDrawerOpen(false)}
       />
 
       {/* Center Main Stage */}
@@ -297,6 +302,9 @@ export default function AdminApp() {
           setIsEditing={setIsEditing}
           onAutoGenerateAI={() => setShowAiModal(true)}
           onOpenCongregationView={() => window.open('#/congregation', '_blank')}
+          onToggleLeftDrawer={() => setLeftDrawerOpen((v) => !v)}
+          onToggleRightDrawer={() => setRightDrawerOpen((v) => !v)}
+          alertCount={alerts.length}
         />
 
         <BulletinPreview
@@ -327,6 +335,8 @@ export default function AdminApp() {
         onDismissAlert={handleDismissAlert}
         onAddVolunteer={handleAddVolunteer}
         onToggleVolunteerAvailability={handleToggleVolunteerAvailability}
+        isOpen={rightDrawerOpen}
+        onClose={() => setRightDrawerOpen(false)}
       />
 
       {/* Modals */}

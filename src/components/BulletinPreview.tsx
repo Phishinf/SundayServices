@@ -116,7 +116,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
   };
 
   return (
-    <div className="flex-1 p-8 bg-slate-200 overflow-y-auto flex flex-col items-center justify-start min-h-0 relative">
+    <div className="flex-1 p-3 sm:p-8 bg-slate-200 overflow-y-auto flex flex-col items-center justify-start min-h-0 relative">
       {/* Editorial approval workflow status & actions */}
       <WorkflowStatusBar
         service={service}
@@ -128,7 +128,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
 
       {/* Bulletin page navigator: mirrors the printed original's sections so
           digitizing them can happen gradually, page by page */}
-      <div className="w-[540px] mb-4 flex flex-wrap gap-1.5">
+      <div className="w-full max-w-[540px] mb-4 flex flex-wrap gap-1.5">
         {BULLETIN_PAGES.map((page) => (
           <button
             key={page.key}
@@ -146,7 +146,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
 
       {/* Editor toolbar banner when in edit mode */}
       {isEditing && (
-        <div className="w-[540px] mb-4 bg-blue-900 text-white p-3 rounded-lg shadow-md flex items-center justify-between text-xs">
+        <div className="w-full max-w-[540px] mb-4 bg-blue-900 text-white p-3 rounded-lg shadow-md flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Edit3 className="w-4 h-4 text-blue-300" />
             <span className="font-semibold">崇拜程序編輯模式</span>
@@ -161,7 +161,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
       )}
 
       {/* Main Printed Bulletin Document Paper */}
-      <div className="w-[540px] min-h-[640px] bg-white paper-shadow p-12 bulletin-font text-[#2a2a2a] relative overflow-hidden bulletin-paper my-auto shrink-0 transition-all">
+      <div className="w-full max-w-[540px] min-h-[640px] bg-white paper-shadow p-6 sm:p-12 bulletin-font text-[#2a2a2a] relative overflow-hidden bulletin-paper my-auto shrink-0 transition-all">
         {/* Top Dark Bar Accent */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-slate-900" />
 
@@ -293,24 +293,24 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                   )}
 
                   {isEditing && (
-                    <div className="flex items-center gap-1 ml-2 font-sans opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1 ml-2 font-sans">
                       <button
                         onClick={() => handleMoveItem(index, 'up')}
                         disabled={index === 0}
-                        className="p-1 hover:bg-slate-200 rounded text-slate-600 disabled:opacity-30"
+                        className="p-1.5 hover:bg-slate-200 rounded text-slate-600 disabled:opacity-30"
                       >
                         <ArrowUp className="w-3 h-3" />
                       </button>
                       <button
                         onClick={() => handleMoveItem(index, 'down')}
                         disabled={index === service.items.length - 1}
-                        className="p-1 hover:bg-slate-200 rounded text-slate-600 disabled:opacity-30"
+                        className="p-1.5 hover:bg-slate-200 rounded text-slate-600 disabled:opacity-30"
                       >
                         <ArrowDown className="w-3 h-3" />
                       </button>
                       <button
                         onClick={() => handleDeleteItem(item.id)}
-                        className="p-1 hover:bg-red-100 rounded text-red-600"
+                        className="p-1.5 hover:bg-red-100 rounded text-red-600"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
@@ -368,7 +368,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 {isEditing && (
                   <button
                     onClick={() => handleDeleteAnnouncement(ann.id)}
-                    className="text-red-500 hover:text-red-700 ml-2 text-[10px] opacity-0 group-hover:opacity-100 transition-opacity font-sans"
+                    className="text-red-500 hover:text-red-700 ml-2 text-[10px] font-sans shrink-0"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
