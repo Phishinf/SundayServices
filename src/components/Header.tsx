@@ -31,9 +31,9 @@ export const Header: React.FC<HeaderProps> = ({
   const selectedService = services.find((s) => s.id === selectedServiceId);
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 z-10 shadow-xs">
+    <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between gap-4 shrink-0 z-10 shadow-xs overflow-x-auto">
       {/* Service Selector */}
-      <div className="flex items-center gap-4 text-sm font-medium">
+      <div className="flex items-center gap-4 text-sm font-medium shrink-0">
         <span className="text-slate-400 font-semibold uppercase text-xs tracking-wider">崇拜場次：</span>
         <div className="flex items-center gap-2">
           <select
@@ -71,11 +71,11 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2.5 shrink-0">
         <button
           onClick={onOpenCongregationView}
           title="在新分頁開啟會眾版程序表"
-          className="px-3.5 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-50 text-slate-700 transition-colors"
+          className="px-3.5 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-50 text-slate-700 transition-colors shrink-0 whitespace-nowrap"
         >
           <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
           會眾版連結
@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={onAutoGenerateAI}
-          className="px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+          className="px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shrink-0 whitespace-nowrap"
         >
           <Sparkles className="w-3.5 h-3.5 text-purple-600 animate-pulse" />
           AI 智能優化
@@ -91,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className={`px-3.5 py-1.5 border rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+          className={`px-3.5 py-1.5 border rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shrink-0 whitespace-nowrap ${
             isEditing
               ? 'bg-blue-50 border-blue-300 text-blue-700'
               : 'border-slate-200 hover:bg-slate-50 text-slate-700'
@@ -103,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={onExportPDF}
-          className="px-4 py-1.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 transition-colors"
+          className="px-4 py-1.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 transition-colors shrink-0 whitespace-nowrap"
         >
           <Printer className="w-4 h-4 text-slate-500" />
           匯出 PDF
@@ -117,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
               ? '需先完成牧師審閱及執事複核，方可發送'
               : undefined
           }
-          className="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 flex items-center gap-1.5 shadow-xs transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed disabled:hover:bg-slate-300"
+          className="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 flex items-center gap-1.5 shadow-xs transition-colors shrink-0 whitespace-nowrap disabled:bg-slate-300 disabled:cursor-not-allowed disabled:hover:bg-slate-300"
         >
           <Send className="w-4 h-4" />
           定稿並發送

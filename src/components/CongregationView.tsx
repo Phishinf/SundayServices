@@ -88,12 +88,12 @@ export const CongregationView: React.FC = () => {
       {(() => {
         const visiblePages = BULLETIN_PAGES.filter((p) => pageHasContent(p.key, service));
         return visiblePages.length > 1 ? (
-          <div className="w-[540px] mb-4 flex gap-1 overflow-x-auto no-print">
+          <div className="w-[540px] mb-4 flex flex-wrap gap-1.5 no-print">
             {visiblePages.map((page) => (
               <button
                 key={page.key}
                 onClick={() => setActivePage(page.key)}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors shrink-0 ${
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors ${
                   activePage === page.key
                     ? 'bg-slate-900 text-white'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
