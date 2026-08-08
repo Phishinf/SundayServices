@@ -12,6 +12,13 @@ export interface Announcement {
   text: string;
 }
 
+// Editorial approval pipeline: officer drafts -> pastor reviews -> deacon
+// final cross-check -> finalized (ready to publish/send). A reject at either
+// review stage sends the bulletin back to 'draft' for the officer to re-edit.
+export type ServiceStatus = 'draft' | 'pastor_review' | 'deacon_review' | 'finalized';
+
+export type EditorialRole = 'officer' | 'pastor' | 'deacon';
+
 export interface ChurchService {
   id: string;
   title: string; // e.g. "Sunday Morning Oct 22, 2023"
@@ -24,7 +31,7 @@ export interface ChurchService {
   preacher: string;
   items: ServiceItem[];
   announcements: Announcement[];
-  status: 'draft' | 'scheduled' | 'finalized';
+  status: ServiceStatus;
 }
 
 export interface Volunteer {

@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { ChurchService, ServiceItem, Announcement } from '../types/bulletin';
+import { ChurchService, ServiceItem, Announcement, EditorialRole } from '../types/bulletin';
 import { Plus, Trash2, ArrowUp, ArrowDown, Edit3, Check, Sparkles } from 'lucide-react';
+import { WorkflowStatusBar } from './WorkflowStatusBar';
 
 interface BulletinPreviewProps {
   service: ChurchService;
   onUpdateService: (updated: ChurchService) => void;
   isEditing: boolean;
   onOpenAiAssist: () => void;
+  currentRole: EditorialRole;
+  onSubmitForReview: () => void;
+  onWorkflowApprove: () => void;
+  onWorkflowReject: () => void;
 }
 
 export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
@@ -14,6 +19,10 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
   onUpdateService,
   isEditing,
   onOpenAiAssist,
+  currentRole,
+  onSubmitForReview,
+  onWorkflowApprove,
+  onWorkflowReject,
 }) => {
   const [editingHeader, setEditingHeader] = useState(false);
   const [churchName, setChurchName] = useState(service.churchName);
@@ -98,6 +107,15 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
 
   return (
     <div className="flex-1 p-8 bg-slate-200 overflow-y-auto flex flex-col items-center justify-start min-h-0 relative">
+      {/* Editorial approval workflow status & actions */}
+      <WorkflowStatusBar
+        service={service}
+        currentRole={currentRole}
+        onSubmitForReview={onSubmitForReview}
+        onApprove={onWorkflowApprove}
+        onReject={onWorkflowReject}
+      />
+
       {/* Editor toolbar banner when in edit mode */}
       {isEditing && (
         <div className="w-[540px] mb-4 bg-blue-900 text-white p-3 rounded-lg shadow-md flex items-center justify-between text-xs">

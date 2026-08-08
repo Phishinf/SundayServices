@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ConfigurationRules, AutomationToggles } from '../types/bulletin';
+import { ConfigurationRules, AutomationToggles, EditorialRole } from '../types/bulletin';
 import { RefreshCw, CheckCircle2, Sliders, ShieldCheck } from 'lucide-react';
+import { ROLE_LABELS } from '../utils/workflow';
 
 interface SidebarLeftProps {
   toggles: AutomationToggles;
@@ -9,7 +10,11 @@ interface SidebarLeftProps {
   setRules: React.Dispatch<React.SetStateAction<ConfigurationRules>>;
   onRefreshSchedule: () => void;
   isRefreshing: boolean;
+  currentRole: EditorialRole;
+  onChangeRole: (role: EditorialRole) => void;
 }
+
+const ROLE_OPTIONS: EditorialRole[] = ['officer', 'pastor', 'deacon'];
 
 export const SidebarLeft: React.FC<SidebarLeftProps> = ({
   toggles,
@@ -18,6 +23,8 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
   setRules,
   onRefreshSchedule,
   isRefreshing,
+  currentRole,
+  onChangeRole,
 }) => {
   const [showRuleModal, setShowRuleModal] = useState(false);
   const [tempRules, setTempRules] = useState<ConfigurationRules>(rules);
@@ -49,6 +56,28 @@ export const SidebarLeft: React.FC<SidebarLeftProps> = ({
 
       {/* Main Content Area */}
       <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+        {/* Editorial Role Switcher (simulates staff login for the approval workflow) */}
+        <section>
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">
+            目前身份（審批流程示範）
+          </label>
+          <div className="grid grid-cols-3 gap-1.5 bg-slate-800 p-1 rounded-lg border border-slate-700/80">
+            {ROLE_OPTIONS.map((role) => (
+              <button
+                key={role}
+                onClick={() => onChangeRole(role)}
+                className={`py-1.5 rounded-md text-[11px] font-bold transition-colors ${
+                  currentRole === role
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'text-slate-300 hover:bg-slate-700'
+                }`}
+              >
+                {ROLE_LABELS[role]}
+              </button>
+            ))}
+          </div>
+        </section>
+
         {/* Active Automation Toggles */}
         <section>
           <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">

@@ -7,7 +7,7 @@ interface FinalizeModalProps {
   onClose: () => void;
   service: ChurchService;
   volunteers: Volunteer[];
-  onConfirmFinalize: () => void;
+  onConfirmFinalize: (opts: { sendToCongregation: boolean; sendToStaff: boolean }) => void;
 }
 
 export const FinalizeModal: React.FC<FinalizeModalProps> = ({
@@ -26,7 +26,7 @@ export const FinalizeModal: React.FC<FinalizeModalProps> = ({
   const handleSend = () => {
     setSentSuccess(true);
     setTimeout(() => {
-      onConfirmFinalize();
+      onConfirmFinalize({ sendToCongregation, sendToStaff });
       setSentSuccess(false);
       onClose();
     }, 1200);

@@ -48,7 +48,7 @@ export const INITIAL_SERVICES: ChurchService[] = [
     sermonTitle: '同心侍主',
     scripture: '羅馬書 12:1-2',
     preacher: '陳潤生傳道',
-    status: 'scheduled',
+    status: 'pastor_review',
     items: [
       { id: '201', type: 'prelude', label: '序樂', detail: '梁湘盈姊妹' },
       { id: '202', type: 'call', label: '宣召', detail: '詩篇 100:1-5 — 蔡錦源弟兄' },

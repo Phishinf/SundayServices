@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChurchService } from '../types/bulletin';
-import { Plus, Printer, Send, Sparkles, CheckCircle, FileText } from 'lucide-react';
+import { Plus, Printer, Send, Sparkles, CheckCircle, FileText, ExternalLink } from 'lucide-react';
+import { STATUS_SHORT_LABELS } from '../utils/workflow';
 
 interface HeaderProps {
   services: ChurchService[];
@@ -12,13 +13,8 @@ interface HeaderProps {
   isEditing: boolean;
   setIsEditing: (val: boolean) => void;
   onAutoGenerateAI: () => void;
+  onOpenCongregationView: () => void;
 }
-
-const STATUS_LABELS: Record<string, string> = {
-  draft: '草稿',
-  scheduled: '已排期',
-  finalized: '已定稿',
-};
 
 export const Header: React.FC<HeaderProps> = ({
   services,
@@ -30,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   isEditing,
   setIsEditing,
   onAutoGenerateAI,
+  onOpenCongregationView,
 }) => {
   const selectedService = services.find((s) => s.id === selectedServiceId);
 
@@ -46,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             {services.map((service) => (
               <option key={service.id} value={service.id}>
-                {service.title}（{STATUS_LABELS[service.status] || service.status}）
+                {service.title}（{STATUS_SHORT_LABELS[service.status] || service.status}）
               </option>
             ))}
           </select>
@@ -68,13 +65,22 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'bg-amber-100 text-amber-800 border border-amber-200'
             }`}
           >
-            {STATUS_LABELS[selectedService.status] || selectedService.status}
+            {STATUS_SHORT_LABELS[selectedService.status] || selectedService.status}
           </span>
         )}
       </div>
 
       {/* Right Controls */}
       <div className="flex items-center gap-2.5">
+        <button
+          onClick={onOpenCongregationView}
+          title="在新分頁開啟會眾版程序表"
+          className="px-3.5 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-50 text-slate-700 transition-colors"
+        >
+          <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+          會眾版連結
+        </button>
+
         <button
           onClick={onAutoGenerateAI}
           className="px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
@@ -105,7 +111,13 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={onFinalizeAndSend}
-          className="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 flex items-center gap-1.5 shadow-xs transition-colors"
+          disabled={selectedService?.status !== 'finalized'}
+          title={
+            selectedService?.status !== 'finalized'
+              ? '需先完成牧師審閱及執事複核，方可發送'
+              : undefined
+          }
+          className="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-semibold hover:bg-slate-800 flex items-center gap-1.5 shadow-xs transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed disabled:hover:bg-slate-300"
         >
           <Send className="w-4 h-4" />
           定稿並發送
