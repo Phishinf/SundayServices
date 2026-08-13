@@ -27,6 +27,7 @@ import {
 } from './types/bulletin';
 
 import { getPublishedServices, publishService } from './utils/publishStore';
+import { findLastBulletin, deriveNextBulletin } from './utils/deriveNextBulletin';
 
 export default function AdminApp() {
   const [services, setServices] = useState<ChurchService[]>(INITIAL_SERVICES);
@@ -65,42 +66,19 @@ export default function AdminApp() {
   };
 
   const handleAddNewService = () => {
-    const titlePrompt = prompt('請輸入新崇拜場次名稱（例：將臨期主日 12月3日）：');
+    // Always start a new bulletin from the last one, one week forward, with
+    // its roster/content carried over and ready for edit — never a blank
+    // or hardcoded template.
+    const lastBulletin = findLastBulletin(services);
+    const draft = deriveNextBulletin(lastBulletin);
+
+    const titlePrompt = prompt('請確認新崇拜場次名稱：', draft.title);
     if (!titlePrompt) return;
 
-    const newId = 'service-' + Date.now();
-    const newService: ChurchService = {
-      id: newId,
-      title: titlePrompt,
-      date: '二零二六年十二月三日',
-      churchName: activeService.churchName,
-      motto: activeService.motto,
-      sermonSeries: rules.sermonSeries,
-      sermonTitle: '將臨期的盼望',
-      scripture: '以賽亞書 9:2-7',
-      preacher: '葉秀嫻傳道',
-      status: 'draft',
-      items: [
-        { id: '1', type: 'prelude', label: '序樂', detail: '司琴' },
-        { id: '2', type: 'call', label: '宣召', detail: '葉秀嫻傳道' },
-        { id: '3', type: 'hymn', label: '始頌', detail: '普世歡騰', hymnNumber: '211' },
-        { id: '4', type: 'sermon', label: '信息', detail: '將臨期的盼望', leader: '葉秀嫻傳道' },
-        { id: '5', type: 'benediction', label: '祝禱', detail: '葉秀嫻傳道' },
-      ],
-      announcements: [
-        { id: 'a1', text: '歡迎新來賓！請於座位上填寫連繫卡，方便教會與您保持聯絡。' },
-      ],
-      hymnLyrics: [],
-      worshipNotes: [],
-      ministryUpdates: [],
-      otherNotices: [],
-      weeklyPrayers: [],
-      serviceRoster: [],
-      attendance: [],
-    };
+    const newService: ChurchService = { ...draft, title: titlePrompt };
 
     setServices((prev) => [...prev, newService]);
-    setSelectedServiceId(newId);
+    setSelectedServiceId(newService.id);
   };
 
   const handleRefreshSchedule = () => {
