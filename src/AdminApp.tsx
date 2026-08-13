@@ -24,6 +24,8 @@ import {
   ConfigurationRules,
   AutomationToggles,
   EditorialRole,
+  TextBlock,
+  RosterRow,
 } from './types/bulletin';
 
 import { getPublishedServices, publishService } from './utils/publishStore';
@@ -63,6 +65,23 @@ export default function AdminApp() {
     setServices((prev) =>
       prev.map((serv) => (serv.id === updated.id ? updated : serv))
     );
+  };
+
+  const handleImportExcelToActiveService = (data: { hymnLyrics: TextBlock[]; serviceRoster: RosterRow[] }) => {
+    handleUpdateActiveService({
+      ...activeService,
+      hymnLyrics: data.hymnLyrics.length > 0 ? data.hymnLyrics : activeService.hymnLyrics,
+      serviceRoster: data.serviceRoster.length > 0 ? data.serviceRoster : activeService.serviceRoster,
+    });
+  };
+
+  const handleRestoreBackup = (service: ChurchService) => {
+    setServices((prev) =>
+      prev.some((s) => s.id === service.id)
+        ? prev.map((s) => (s.id === service.id ? service : s))
+        : [...prev, service]
+    );
+    setSelectedServiceId(service.id);
   };
 
   const handleAddNewService = () => {
@@ -265,6 +284,9 @@ export default function AdminApp() {
         onChangeRole={setCurrentRole}
         isOpen={leftDrawerOpen}
         onClose={() => setLeftDrawerOpen(false)}
+        activeService={activeService}
+        onImportExcel={handleImportExcelToActiveService}
+        onRestoreBackup={handleRestoreBackup}
       />
 
       {/* Center Main Stage */}
