@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChurchService } from '../types/bulletin';
 import { Plus, Printer, Send, Sparkles, CheckCircle, FileText, ExternalLink, Menu, AlertTriangle } from 'lucide-react';
 import { STATUS_SHORT_LABELS } from '../utils/workflow';
+import { classifyServiceDate, SUNDAY_RELATION_TAGS, SUNDAY_RELATION_BADGE_CLASSES } from '../utils/sundayDates';
 
 interface HeaderProps {
   services: ChurchService[];
@@ -35,6 +36,8 @@ export const Header: React.FC<HeaderProps> = ({
   alertCount,
 }) => {
   const selectedService = services.find((s) => s.id === selectedServiceId);
+  const selectedRelation = selectedService ? classifyServiceDate(selectedService.date) : 'unknown';
+  const selectedRelationTag = SUNDAY_RELATION_TAGS[selectedRelation];
 
   return (
     <header className="h-16 bg-white border-b border-slate-200 px-3 sm:px-8 flex items-center justify-between gap-2 sm:gap-4 shrink-0 z-10 shadow-xs overflow-x-auto">
@@ -54,11 +57,15 @@ export const Header: React.FC<HeaderProps> = ({
             onChange={(e) => onSelectService(e.target.value)}
             className="bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 font-bold text-slate-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-colors max-w-[140px] sm:max-w-none"
           >
-            {services.map((service) => (
-              <option key={service.id} value={service.id}>
-                {service.title}（{STATUS_SHORT_LABELS[service.status] || service.status}）
-              </option>
-            ))}
+            {services.map((service) => {
+              const tag = SUNDAY_RELATION_TAGS[classifyServiceDate(service.date)];
+              return (
+                <option key={service.id} value={service.id}>
+                  {service.title}（{STATUS_SHORT_LABELS[service.status] || service.status}
+                  {tag ? ` · ${tag}` : ''}）
+                </option>
+              );
+            })}
           </select>
 
           <button
@@ -79,6 +86,14 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             {STATUS_SHORT_LABELS[selectedService.status] || selectedService.status}
+          </span>
+        )}
+
+        {selectedRelationTag && (
+          <span
+            className={`hidden md:inline text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${SUNDAY_RELATION_BADGE_CLASSES[selectedRelation]}`}
+          >
+            {selectedRelationTag}
           </span>
         )}
       </div>

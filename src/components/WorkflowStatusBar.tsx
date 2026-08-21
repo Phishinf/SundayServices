@@ -1,7 +1,8 @@
 import React from 'react';
 import { ChurchService, EditorialRole } from '../types/bulletin';
 import { STATUS_ORDER, STATUS_STEP_LABELS, ROLE_LABELS } from '../utils/workflow';
-import { Check, Send, Undo2, Clock } from 'lucide-react';
+import { classifyServiceDate, SUNDAY_RELATION_MESSAGES, SUNDAY_RELATION_BADGE_CLASSES } from '../utils/sundayDates';
+import { Check, Send, Undo2, Clock, CalendarClock } from 'lucide-react';
 
 interface WorkflowStatusBarProps {
   service: ChurchService;
@@ -19,6 +20,8 @@ export const WorkflowStatusBar: React.FC<WorkflowStatusBarProps> = ({
   onReject,
 }) => {
   const currentIndex = STATUS_ORDER.indexOf(service.status);
+  const sundayRelation = classifyServiceDate(service.date);
+  const sundayMessage = SUNDAY_RELATION_MESSAGES[sundayRelation];
 
   const renderActions = () => {
     if (service.status === 'draft') {
@@ -99,7 +102,19 @@ export const WorkflowStatusBar: React.FC<WorkflowStatusBarProps> = ({
   };
 
   return (
-    <div className="w-full max-w-[540px] mb-4 bg-white border border-slate-200 rounded-lg shadow-xs px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shrink-0">
+    <div className="w-full max-w-[540px] flex flex-col shrink-0">
+    {sundayMessage && (
+      <div
+        className={`mb-2 rounded-lg px-3 py-2 flex items-start gap-2 text-xs ${SUNDAY_RELATION_BADGE_CLASSES[sundayRelation]}`}
+      >
+        <CalendarClock className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+        <div>
+          <p className="font-bold">{sundayMessage.title}</p>
+          <p className="opacity-90">{sundayMessage.body}</p>
+        </div>
+      </div>
+    )}
+    <div className="w-full mb-4 bg-white border border-slate-200 rounded-lg shadow-xs px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shrink-0">
       {/* Stepper */}
       <div className="flex items-center flex-wrap gap-y-1.5">
         {STATUS_ORDER.map((s, idx) => {
@@ -144,6 +159,7 @@ export const WorkflowStatusBar: React.FC<WorkflowStatusBarProps> = ({
         </span>
         {renderActions()}
       </div>
+    </div>
     </div>
   );
 };
