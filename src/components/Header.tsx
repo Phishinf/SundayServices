@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChurchService } from '../types/bulletin';
-import { Plus, Printer, Send, Sparkles, CheckCircle, FileText, ExternalLink, Menu, AlertTriangle } from 'lucide-react';
+import { Plus, Printer, Send, Sparkles, CheckCircle, FileText, ExternalLink, Menu, AlertTriangle, CalendarDays } from 'lucide-react';
 import { STATUS_SHORT_LABELS } from '../utils/workflow';
 import { classifyServiceDate, SUNDAY_RELATION_TAGS, SUNDAY_RELATION_BADGE_CLASSES } from '../utils/sundayDates';
+
+const WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'];
+
+function formatTodayLabel(date: Date): string {
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日（星期${WEEKDAY_LABELS[date.getDay()]}）`;
+}
 
 interface HeaderProps {
   services: ChurchService[];
@@ -39,6 +45,14 @@ export const Header: React.FC<HeaderProps> = ({
   const selectedRelation = selectedService ? classifyServiceDate(selectedService.date) : 'unknown';
   const selectedRelationTag = SUNDAY_RELATION_TAGS[selectedRelation];
 
+  const [today, setToday] = useState<Date>(() => new Date());
+  useEffect(() => {
+    // Re-check once a minute so the date rolls over correctly if the app
+    // is left open past midnight, without a per-second re-render.
+    const id = setInterval(() => setToday(new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <header className="h-16 bg-white border-b border-slate-200 px-3 sm:px-8 flex items-center justify-between gap-2 sm:gap-4 shrink-0 z-10 shadow-xs overflow-x-auto">
       {/* Service Selector */}
@@ -50,6 +64,17 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <Menu className="w-5 h-5" />
         </button>
+
+        <div
+          className="flex items-center gap-1.5 text-slate-500 shrink-0 pr-2 sm:pr-4 sm:mr-1 border-r border-slate-200"
+          title="今天日期"
+        >
+          <CalendarDays className="w-4 h-4 text-slate-400 shrink-0" />
+          <span className="hidden sm:inline text-xs font-semibold whitespace-nowrap">
+            {formatTodayLabel(today)}
+          </span>
+        </div>
+
         <span className="hidden sm:inline text-slate-400 font-semibold uppercase text-xs tracking-wider">崇拜場次：</span>
         <div className="flex items-center gap-2">
           <select
