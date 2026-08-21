@@ -158,11 +158,11 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={onExportPDF}
-          title="匯出 PDF"
+          title="匯出（家事分享 PPT／整份程序表 PDF）"
           className="px-2 sm:px-4 py-1.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 transition-colors shrink-0 whitespace-nowrap"
         >
           <Printer className="w-4 h-4 text-slate-500" />
-          <span className="hidden sm:inline">匯出 PDF</span>
+          <span className="hidden sm:inline">匯出</span>
         </button>
 
         <button

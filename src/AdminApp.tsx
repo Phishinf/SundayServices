@@ -278,7 +278,7 @@ export default function AdminApp() {
   };
 
   return (
-    <div className="flex h-screen w-screen bg-slate-100 text-slate-900 overflow-hidden">
+    <div className="admin-shell flex h-screen w-screen bg-slate-100 text-slate-900 overflow-hidden">
       {/* Left Operations & Rules Sidebar */}
       <SidebarLeft
         toggles={toggles}

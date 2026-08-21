@@ -31,11 +31,25 @@ body {
     padding: 0 !important;
     margin: 0 !important;
   }
+  /* Once its children (aside/header/.no-print) are hidden, this shell would
+     otherwise still hold its explicit h-screen (100vh) height, leaving a
+     blank page before the portaled FullBulletinPrintDocument content — see
+     that component's comment for how a Playwright PDF render caught this. */
+  .admin-shell {
+    height: auto !important;
+    min-height: 0 !important;
+  }
   .bulletin-paper {
     box-shadow: none !important;
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
     padding: 1.5rem !important;
+  }
+  .print-page-break {
+    break-after: page;
+  }
+  .print-page-break:last-child {
+    break-after: auto;
   }
 }

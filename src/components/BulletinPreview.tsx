@@ -131,7 +131,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
   };
 
   return (
-    <div className="flex-1 p-3 sm:p-8 bg-slate-200 overflow-y-auto flex flex-col items-center justify-start min-h-0 relative">
+    <div className="flex-1 p-3 sm:p-8 bg-slate-200 overflow-y-auto flex flex-col items-center justify-start min-h-0 relative no-print">
       {/* Editorial approval workflow status & actions */}
       <WorkflowStatusBar
         service={service}
