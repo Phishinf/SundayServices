@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChurchService } from '../types/bulletin';
-import { Printer, FileCheck, Copy, Download } from 'lucide-react';
+import { Printer, FileCheck, Copy, Download, Loader2 } from 'lucide-react';
+import { exportMinistryUpdatesToPptx } from '../utils/exportMinistryPps';
 
 interface ExportModalProps {
   isOpen: boolean;
@@ -9,10 +10,25 @@ interface ExportModalProps {
 }
 
 export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose, service }) => {
+  const [isExportingPpt, setIsExportingPpt] = useState(false);
+
   if (!isOpen) return null;
 
   const handleTriggerPrint = () => {
     window.print();
+  };
+
+  const handleExportMinistryPpt = async () => {
+    if (isExportingPpt) return;
+    setIsExportingPpt(true);
+    try {
+      await exportMinistryUpdatesToPptx(service);
+    } catch (err) {
+      console.error(err);
+      alert('匯出 PPT 失敗，請重試。');
+    } finally {
+      setIsExportingPpt(false);
+    }
   };
 
   const handleCopyText = () => {
@@ -78,6 +94,26 @@ ${section('上週聚會出席人數表', service.attendance.map((a) => `${a.meet
               <Copy className="w-6 h-6 text-slate-700 mx-auto group-hover:scale-110 transition-transform" />
               <span className="font-bold text-slate-900 block">複製純文字</span>
               <span className="text-[10px] text-slate-500 block">包含全部頁面內容，適用於電郵通訊及投影片</span>
+            </button>
+
+            <button
+              onClick={handleExportMinistryPpt}
+              disabled={service.ministryUpdates.length === 0 || isExportingPpt}
+              className="col-span-2 p-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-center space-y-2 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-slate-50"
+            >
+              {isExportingPpt ? (
+                <Loader2 className="w-6 h-6 text-slate-700 mx-auto animate-spin" />
+              ) : (
+                <Download className="w-6 h-6 text-slate-700 mx-auto group-hover:scale-110 transition-transform" />
+              )}
+              <span className="font-bold text-slate-900 block">
+                {isExportingPpt ? '匯出中...' : '家事分享 PPT／投影片'}
+              </span>
+              <span className="text-[10px] text-slate-500 block">
+                {service.ministryUpdates.length === 0
+                  ? '本場次尚未有家事分享內容可匯出'
+                  : `將「家事分享」共 ${service.ministryUpdates.length} 項內容匯出為 .pptx，可直接開啟並播放投影片`}
+              </span>
             </button>
           </div>
         </div>
