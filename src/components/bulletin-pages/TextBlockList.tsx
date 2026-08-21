@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { TextBlock } from '../../types/bulletin';
 import { Plus, Trash2 } from 'lucide-react';
+import { RichTextField } from './RichTextField';
+import { sanitizeRichText } from '../../utils/sanitizeRichText';
 
 interface TextBlockListProps {
   blocks: TextBlock[];
@@ -87,21 +89,21 @@ export const TextBlockList: React.FC<TextBlockListProps> = ({
                 className="w-full border border-slate-300 rounded px-2 py-1 text-[11px] italic text-slate-600 focus:outline-none focus:border-blue-500"
                 placeholder={metaPlaceholder}
               />
-              <textarea
+              <RichTextField
                 value={block.body}
-                onChange={(e) => updateBlock(block.id, { body: e.target.value })}
-                rows={4}
-                className="w-full border border-slate-300 rounded px-2 py-1.5 text-xs font-serif resize-y focus:outline-none focus:border-blue-500"
+                onChange={(html) => updateBlock(block.id, { body: html })}
                 placeholder={bodyPlaceholder}
+                className="w-full min-h-[5.5rem] border border-slate-300 rounded px-2 py-1.5 text-xs font-serif focus:outline-none focus:border-blue-500"
               />
             </div>
           ) : (
             <div>
               <h4 className="text-sm font-bold text-slate-900 font-serif">{block.title}</h4>
               {block.meta && <p className="text-[11px] italic text-slate-500 mt-0.5">{block.meta}</p>}
-              <p className="text-[12px] text-slate-800 mt-1.5 leading-relaxed whitespace-pre-line font-serif">
-                {block.body}
-              </p>
+              <p
+                className="text-[12px] text-slate-800 mt-1.5 leading-relaxed whitespace-pre-line font-serif"
+                dangerouslySetInnerHTML={{ __html: sanitizeRichText(block.body) }}
+              />
             </div>
           )}
         </div>

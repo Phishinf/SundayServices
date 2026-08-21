@@ -9,6 +9,8 @@
 
 import type PptxGenJS from 'pptxgenjs';
 import { ChurchService, TextBlock } from '../types/bulletin';
+import { richTextToPlainText } from './sanitizeRichText';
+import { richTextToPptxRuns } from './richTextToPptxRuns';
 
 const FONT = 'Microsoft JhengHei';
 const INK = '1E293B'; // slate-800
@@ -68,10 +70,10 @@ function addItemSlide(pptx: PptxGenJS, item: TextBlock): void {
     });
   }
 
-  slide.addText(item.body, {
+  slide.addText(richTextToPptxRuns(item.body), {
     x: 0.5, y: bodyTop, w: SLIDE_W - 1, h: SLIDE_H - bodyTop - 0.4,
     align: 'left', valign: 'top', fontFace: FONT,
-    fontSize: bodyFontSize(item.body), color: INK,
+    fontSize: bodyFontSize(richTextToPlainText(item.body)), color: INK,
     lineSpacingMultiple: 1.3, fit: 'shrink',
   });
 }
