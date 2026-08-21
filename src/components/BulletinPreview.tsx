@@ -459,7 +459,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                 <button
                   onClick={handleExportMinistryPpt}
                   disabled={isExportingPpt}
-                  title="將家事分享匯出為 PPT 投影片"
+                  title="匯出為投影片，每頁自動播放 10 秒並循環播放"
                   className="flex items-center gap-1 px-2 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-md text-[10px] font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isExportingPpt ? (
@@ -467,7 +467,7 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
                   ) : (
                     <Download className="w-3 h-3" />
                   )}
-                  {isExportingPpt ? '匯出中...' : '匯出 PPT'}
+                  {isExportingPpt ? '匯出中...' : '匯出'}
                 </button>
               )}
             </div>

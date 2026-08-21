@@ -1,6 +1,11 @@
 // Turns "家事分享" (ministryUpdates) into a downloadable .pptx deck — one
 // slide per item plus a title slide — so officers can project it during
 // announcements instead of retyping it into PowerPoint by hand.
+//
+// The deck is also set to play like a self-running slideshow: each slide
+// auto-advances after SECONDS_PER_SLIDE with no click needed, and the show
+// loops continuously, so pressing "Slide Show > From Beginning" once lets it
+// run like a looping announcement video on a lobby screen.
 
 import type PptxGenJS from 'pptxgenjs';
 import { ChurchService, TextBlock } from '../types/bulletin';
@@ -12,6 +17,8 @@ const ACCENT = '2563EB'; // blue-600
 
 const SLIDE_W = 10;
 const SLIDE_H = 5.63; // 16:9
+
+const SECONDS_PER_SLIDE = 10;
 
 function bodyFontSize(body: string): number {
   const len = body.length;
@@ -69,6 +76,53 @@ function addItemSlide(pptx: PptxGenJS, item: TextBlock): void {
   });
 }
 
+// pptxgenjs has no API for slide timing/looping, so this patches the raw
+// OOXML parts after the fact. Verified against pptxgenjs 4.0.1's actual
+// output (not just the spec) before wiring this in:
+//   - ppt/slides/slideN.xml ends "...</p:clrMapOvr></p:sld>" — CT_Slide
+//     requires <p:transition> to come after <p:clrMapOvr>, so inserting
+//     right before the closing </p:sld> tag is the correct position.
+//   - ppt/presProps.xml is emitted as an empty self-closed
+//     "<p:presentationPr .../>", safe to expand with a <p:showPr> child.
+async function makeSelfRunning(pptxBuffer: ArrayBuffer): Promise<Blob> {
+  const { default: JSZip } = await import('jszip');
+  const zip = await JSZip.loadAsync(pptxBuffer);
+
+  const transitionTag =
+    `<p:transition spd="med" advClick="0" advTm="${SECONDS_PER_SLIDE * 1000}"><p:fade/></p:transition>`;
+
+  const slidePaths = Object.keys(zip.files).filter((path) => /^ppt\/slides\/slide\d+\.xml$/.test(path));
+  for (const path of slidePaths) {
+    const xml = await zip.file(path)!.async('string');
+    zip.file(path, xml.replace('</p:sld>', `${transitionTag}</p:sld>`));
+  }
+
+  const presPropsPath = 'ppt/presProps.xml';
+  const presPropsXml = await zip.file(presPropsPath)?.async('string');
+  if (presPropsXml) {
+    zip.file(
+      presPropsPath,
+      presPropsXml.replace(
+        /<p:presentationPr([^>]*)\/>/,
+        '<p:presentationPr$1><p:showPr loop="1"><p:present/></p:showPr></p:presentationPr>'
+      )
+    );
+  }
+
+  return zip.generateAsync({ type: 'blob' });
+}
+
+function downloadBlob(blob: Blob, fileName: string): void {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
 export async function exportMinistryUpdatesToPptx(service: ChurchService): Promise<void> {
   // Loaded on demand — pptxgenjs is sizeable and most sessions never export a deck.
   const { default: PptxGenJS } = await import('pptxgenjs');
@@ -79,5 +133,7 @@ export async function exportMinistryUpdatesToPptx(service: ChurchService): Promi
   addTitleSlide(pptx, service);
   service.ministryUpdates.forEach((item) => addItemSlide(pptx, item));
 
-  await pptx.writeFile({ fileName: `家事分享　${service.title}.pptx` });
+  const buffer = (await pptx.write({ outputType: 'arraybuffer' })) as ArrayBuffer;
+  const selfRunningBlob = await makeSelfRunning(buffer);
+  downloadBlob(selfRunningBlob, `家事分享　${service.title}.pptx`);
 }

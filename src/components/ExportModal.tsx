@@ -107,12 +107,12 @@ ${section('上週聚會出席人數表', service.attendance.map((a) => `${a.meet
                 <Download className="w-6 h-6 text-slate-700 mx-auto group-hover:scale-110 transition-transform" />
               )}
               <span className="font-bold text-slate-900 block">
-                {isExportingPpt ? '匯出中...' : '家事分享 PPT／投影片'}
+                {isExportingPpt ? '匯出中...' : '匯出'}
               </span>
               <span className="text-[10px] text-slate-500 block">
                 {service.ministryUpdates.length === 0
                   ? '本場次尚未有家事分享內容可匯出'
-                  : `將「家事分享」共 ${service.ministryUpdates.length} 項內容匯出為 .pptx，可直接開啟並播放投影片`}
+                  : `將「家事分享」共 ${service.ministryUpdates.length} 項內容匯出為 .pptx，每頁自動播放 10 秒並循環播放，如投影片般播放`}
               </span>
             </button>
           </div>
