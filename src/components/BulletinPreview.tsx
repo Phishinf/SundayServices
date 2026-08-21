@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ChurchService, ServiceItem, Announcement, EditorialRole } from '../types/bulletin';
-import { Plus, Trash2, ArrowUp, ArrowDown, Edit3, Check, Sparkles } from 'lucide-react';
+import { Plus, Trash2, ArrowUp, ArrowDown, Edit3, Check, Sparkles, Download, Loader2 } from 'lucide-react';
 import { WorkflowStatusBar } from './WorkflowStatusBar';
 import { TextBlockList } from './bulletin-pages/TextBlockList';
 import { RosterTable } from './bulletin-pages/RosterTable';
 import { AttendanceTable } from './bulletin-pages/AttendanceTable';
 import { BULLETIN_PAGES, BulletinPageKey } from '../utils/bulletinPages';
+import { exportMinistryUpdatesToPptx } from '../utils/exportMinistryPps';
 
 interface BulletinPreviewProps {
   service: ChurchService;
@@ -38,10 +39,24 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
   const [newAnnouncement, setNewAnnouncement] = useState('');
 
   const [activePage, setActivePage] = useState<BulletinPageKey>('order');
+  const [isExportingPpt, setIsExportingPpt] = useState(false);
 
   useEffect(() => {
     setActivePage('order');
   }, [service.id]);
+
+  const handleExportMinistryPpt = async () => {
+    if (isExportingPpt) return;
+    setIsExportingPpt(true);
+    try {
+      await exportMinistryUpdatesToPptx(service);
+    } catch (err) {
+      console.error(err);
+      alert('匯出 PPT 失敗，請重試。');
+    } finally {
+      setIsExportingPpt(false);
+    }
+  };
 
   const handleSaveHeader = () => {
     onUpdateService({
@@ -436,9 +451,26 @@ export const BulletinPreview: React.FC<BulletinPreviewProps> = ({
 
         {activePage === 'ministry' && (
           <div>
-            <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 mb-6 font-sans">
-              家事分享
-            </h3>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <h3 className="text-center text-base font-bold uppercase tracking-widest text-slate-900 font-sans">
+                家事分享
+              </h3>
+              {service.ministryUpdates.length > 0 && (
+                <button
+                  onClick={handleExportMinistryPpt}
+                  disabled={isExportingPpt}
+                  title="將家事分享匯出為 PPT 投影片"
+                  className="flex items-center gap-1 px-2 py-1 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-md text-[10px] font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isExportingPpt ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : (
+                    <Download className="w-3 h-3" />
+                  )}
+                  {isExportingPpt ? '匯出中...' : '匯出 PPT'}
+                </button>
+              )}
+            </div>
             <TextBlockList
               blocks={service.ministryUpdates}
               isEditing={isEditing}
