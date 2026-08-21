@@ -29,7 +29,7 @@ import {
 } from './types/bulletin';
 
 import { getPublishedServices, publishService } from './utils/publishStore';
-import { findLastBulletin, deriveNextBulletin } from './utils/deriveNextBulletin';
+import { findLastBulletin, deriveNextBulletin, ensureUpcomingBulletins } from './utils/deriveNextBulletin';
 
 export default function AdminApp() {
   const [services, setServices] = useState<ChurchService[]>(INITIAL_SERVICES);
@@ -59,6 +59,13 @@ export default function AdminApp() {
     if (getPublishedServices().length === 0) {
       publishService(INITIAL_SERVICES[0]);
     }
+  }, []);
+
+  // The coming/next Sunday should always have a draft ready to open, even if
+  // no one has clicked "+" yet — derive them forward from the latest known
+  // bulletin the same way the officer's manual "+" button does.
+  useEffect(() => {
+    setServices((prev) => ensureUpcomingBulletins(prev));
   }, []);
 
   const handleUpdateActiveService = (updated: ChurchService) => {
