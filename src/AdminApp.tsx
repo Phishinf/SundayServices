@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ExternalLink, Sparkles } from 'lucide-react';
 import { SidebarLeft } from './components/SidebarLeft';
 import { Header } from './components/Header';
 import { BulletinPreview } from './components/BulletinPreview';
@@ -307,8 +308,6 @@ export default function AdminApp() {
           onFinalizeAndSend={() => setShowFinalizeModal(true)}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
-          onAutoGenerateAI={() => setShowAiModal(true)}
-          onOpenCongregationView={() => window.open('#/congregation', '_blank')}
           onToggleLeftDrawer={() => setLeftDrawerOpen((v) => !v)}
           onToggleRightDrawer={() => setRightDrawerOpen((v) => !v)}
           alertCount={alerts.length}
@@ -324,6 +323,23 @@ export default function AdminApp() {
           onWorkflowApprove={handleWorkflowApprove}
           onWorkflowReject={handleWorkflowReject}
         />
+
+        {/* Floating action buttons, stacked directly above the voice-assistant mic */}
+        <button
+          onClick={() => window.open('#/congregation', '_blank')}
+          title="在新分頁開啟會眾版程序表"
+          className="absolute bottom-[168px] right-6 w-12 h-12 rounded-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 shadow-lg flex items-center justify-center transition-colors z-30"
+        >
+          <ExternalLink className="w-5 h-5" />
+        </button>
+
+        <button
+          onClick={() => setShowAiModal(true)}
+          title="AI 智能優化"
+          className="absolute bottom-24 right-6 w-12 h-12 rounded-full bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 shadow-lg flex items-center justify-center transition-colors z-30"
+        >
+          <Sparkles className="w-5 h-5 animate-pulse" />
+        </button>
 
         {currentRole === 'officer' && (
           <VoiceOfficerAssistant

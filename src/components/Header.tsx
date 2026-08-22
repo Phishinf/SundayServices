@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ChurchService } from '../types/bulletin';
-import { Plus, Printer, Send, Sparkles, CheckCircle, FileText, ExternalLink, Menu, AlertTriangle, CalendarDays } from 'lucide-react';
+import { Plus, Printer, Send, CheckCircle, FileText, Menu, AlertTriangle, CalendarDays } from 'lucide-react';
 import { STATUS_SHORT_LABELS } from '../utils/workflow';
 import { classifyServiceDate, SUNDAY_RELATION_TAGS, SUNDAY_RELATION_BADGE_CLASSES } from '../utils/sundayDates';
 
@@ -19,8 +19,6 @@ interface HeaderProps {
   onFinalizeAndSend: () => void;
   isEditing: boolean;
   setIsEditing: (val: boolean) => void;
-  onAutoGenerateAI: () => void;
-  onOpenCongregationView: () => void;
   onToggleLeftDrawer: () => void;
   onToggleRightDrawer: () => void;
   alertCount: number;
@@ -35,8 +33,6 @@ export const Header: React.FC<HeaderProps> = ({
   onFinalizeAndSend,
   isEditing,
   setIsEditing,
-  onAutoGenerateAI,
-  onOpenCongregationView,
   onToggleLeftDrawer,
   onToggleRightDrawer,
   alertCount,
@@ -125,24 +121,6 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Right Controls */}
       <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-        <button
-          onClick={onOpenCongregationView}
-          title="在新分頁開啟會眾版程序表"
-          className="px-2 sm:px-3.5 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 hover:bg-slate-50 text-slate-700 transition-colors shrink-0 whitespace-nowrap"
-        >
-          <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
-          <span className="hidden sm:inline">會眾版連結</span>
-        </button>
-
-        <button
-          onClick={onAutoGenerateAI}
-          title="AI 智能優化"
-          className="px-2 sm:px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors shrink-0 whitespace-nowrap"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-purple-600 animate-pulse" />
-          <span className="hidden sm:inline">AI 智能優化</span>
-        </button>
-
         <button
           onClick={() => setIsEditing(!isEditing)}
           title={isEditing ? '檢視程序表' : '編輯程序'}
